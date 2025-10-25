@@ -3,12 +3,14 @@ import type { RootState } from "../../app/store/store";
 import { deleteChar, inputChar, setText } from "../../app/store/typingSlice";
 import { useEffect, useRef } from "react";
 import styles from './TypingArea.module.scss'
+import clsx from "clsx";
+import { Keyboard } from "../Keyboard/Keyboard";
 
 export function TypingArea() {
   const dispatch = useDispatch();
   const ref = useRef<HTMLDivElement>(null);
   const { text, userInput, errors, currentIndex } = useSelector((state: RootState) => state.typing);
-
+  const nextChar = text[currentIndex] || '';
   const handleKeyDown = (e:React.KeyboardEvent) => {
     if(e.key.length === 1){
       dispatch(inputChar(e.key));
@@ -29,43 +31,29 @@ export function TypingArea() {
     <div
       tabIndex={0}
       onKeyDown={handleKeyDown}
-      style={{
-        outline: 'none',
-        fontFamily: 'monospace',
-        fontSize: '1.2em',
-        lineHeight: '1.6',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        width: '100vw',
-        padding: '50px',
-        transition: 'background-color 0.1s ease',
-      }}
+      className={styles.container}
     >
-      {text.split('').map((char, i) => {
-        let color = '#aaa'; // базовый (светлый)
-        const isTyped = i < userInput.length;
-        const isError = isTyped && errors[i];
-        const isCurrent = i === currentIndex; // 👈 текущая позиция
+      <div style={{display: 'flex'}}>
+        {text.split('').map((char, i) => {
+          const isTyped = i < userInput.length;
+          const isError = isTyped && errors[i];
+          const isCurrent = i === currentIndex; 
 
-        if (isTyped) {
-          color = isError ? 'red' : 'black';
-        } else if (isCurrent) {
-          color = '#555'; // текущий символ — чуть темнее, чтобы выделялся
-        }
-        return (
-          <span key={i} className={isCurrent ? styles.blinking : ''} style={{
-              color,
-               // светло-голубой фон
-              borderRadius: '2px',
-              padding: '1px 1px',
-              width: '100%'
-            }}>
-            {char}
-          </span>
-        );
-      })}
+          const className = clsx(
+            styles.char,
+            isTyped && (isError ? styles.typedError : styles.typedCorrect),
+            !isTyped && isCurrent && styles.current
+          );
+
+          return (
+            <span key={i} className={className}>
+              {char}
+            </span>
+          );
+        })}
+      </div>
+
+      <Keyboard targetKey={nextChar} />
     </div>
   )
 }

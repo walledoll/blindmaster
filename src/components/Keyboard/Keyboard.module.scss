@@ -1,0 +1,40 @@
+.keyboard {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 24px;
+  border-radius: 8px;
+  margin-top: 20px;
+  font-family: monospace;
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  gap: 2px;
+  justify-content: center;
+}
+
+.key {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  user-select: none;
+  font-size: 20px;
+}
+
+.key.space {
+  width: 200px;
+}
+
+.key.active {
+  background: #4caf50;
+  color: white;
+  border-color: #45a049;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.6);
+}

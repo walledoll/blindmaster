@@ -1,0 +1,12 @@
+.blinking {
+    animation: blinkBackground 1.0s ease-in-out infinite;
+}
+
+@keyframes blinkBackground {
+    0%, 100% {
+        background-color: transparent;
+    }
+    50% {
+        background-color: #e0f7fa;
+    }
+}

@@ -1,12 +1,23 @@
 import { useDispatch, useSelector } from "react-redux"
 import type { RootState } from "../../app/store/store";
 import { deleteChar, inputChar, setText } from "../../app/store/typingSlice";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from './TypingArea.module.scss'
 import clsx from "clsx";
 import { Keyboard } from "../Keyboard/Keyboard";
+import type { LayoutName } from "../Keyboard/layouts";
 
 export function TypingArea() {
+  const [layout, setLayout] = useState<LayoutName>('en-US');
+  const [currentTarget, setCurrentTarget] = useState<string | null>('a');
+
+  const handleKeyPress = (char: string) => {
+    console.log('User typed:', char);
+    if (char === currentTarget) {
+      // Перейти к следующему символу
+      setCurrentTarget(nextChar); // или из массива/текста
+    }
+  };
   const dispatch = useDispatch();
   const ref = useRef<HTMLDivElement>(null);
   const { text, userInput, errors, currentIndex } = useSelector((state: RootState) => state.typing);
@@ -14,7 +25,6 @@ export function TypingArea() {
   const handleKeyDown = (e:React.KeyboardEvent) => {
     if(e.key.length === 1){
       dispatch(inputChar(e.key));
-      
     }
     else if(e.key === 'Backspace')
       dispatch(deleteChar());
@@ -53,7 +63,17 @@ export function TypingArea() {
         })}
       </div>
 
-      <Keyboard targetKey={nextChar} />
+            <div>
+        <button onClick={() => setLayout(layout === 'en-US' ? 'ru-RU' : 'en-US')}>
+        Switch to {layout === 'en-US' ? 'RU' : 'EN'}
+      </button>
+
+      <Keyboard
+        currentLayout={layout}
+        onKeyPress={handleKeyPress}
+        targetChar={currentTarget}
+      />
+      </div>
     </div>
   )
 }

@@ -43,3 +43,24 @@
         border-right: 3px solid #ccc;
     }
 }
+
+@media (max-width: 786px){
+    .container{
+        font-size: 1rem;
+    }
+    .char{
+        height: 30px;
+    }
+}
+
+@media (max-width: 350px){
+    .container{
+        font-size: 1rem;
+        line-height:  1.0;
+    }
+    .char{
+        font-size: 0.5rem;
+        height: 20px;
+        width: 10px;
+    }
+}
